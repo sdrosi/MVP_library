@@ -4,9 +4,15 @@ const keys = require('./keys.js');
 const db = require('../models');
 require('dotenv').config();
 
+if(process.env.STATUS === 'DEV'){
+    const link = '/auth/google/redirect'
+}else if(process.env.STATUS === 'PROD'){
+    const link ='https://protected-anchorage-15693.herokuapp.com/auth/google/redirect'
+}
+
 passport.use(new GoogleStrategy({
     // options for the google strategy
-    callbackURL: 'https://protected-anchorage-15693.herokuapp.com/auth/google/redirect',
+    callbackURL: link,
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret
 
