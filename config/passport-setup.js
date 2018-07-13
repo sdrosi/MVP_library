@@ -6,7 +6,7 @@ require('dotenv').config();
 
 passport.use(new GoogleStrategy({
     // options for the google strategy
-    callbackURL: 'https://protected-anchorage-15693.herokuapp.com//auth/google/redirect',
+    callbackURL: 'https://protected-anchorage-15693.herokuapp.com/auth/google/redirect',
     clientID: keys.google.clientID,
     clientSecret: keys.google.clientSecret
 
