@@ -17,6 +17,7 @@ $(document).ready(function() {
     //   buildRequestCard(requestObject, respondingUserObject)
     }
 
+
     // Gets data from db to pre-fill the newdream.html form
     // Works
     function getRequestData(book_id) {
@@ -48,7 +49,9 @@ $(document).ready(function() {
               respondingUserObject = {
                   id: data.id,
                   userName: data.userName,
-                  address: data.preferredDropAddress, 
+                  address: data.preferredDropAddress,
+                  lat: data.preferredDropLAT,
+                  lng: data.preferredDropLNG 
               }
               console.log(respondingUserObject)
               buildRequestCard(requestObject, respondingUserObject)
@@ -60,6 +63,21 @@ $(document).ready(function() {
         console.log(book_info)
         console.log("user_info")
         console.log(user_info)
+
+        let initMap = () => {
+            console.log("attempted to load!");
+
+            
+            let options = {
+                zoom: 9,
+                center: {lat: respondingUserObject.lat, lng: respondingUserObject.lng}
+            }
+            
+            let myMap = new google.maps.Map(document.getElementById('myMapDiv'), options);
+            
+            let marker = new google.maps.Marker({ position: {lat: respondingUserObject.lat, lng: respondingUserObject.lng}, map: myMap});
+
+        }
       
             var dataObj = {
               id: book_info.id,
@@ -109,6 +127,10 @@ $(document).ready(function() {
             var address = $("<p>");
             address.addClass("subtitle is-6");
             address.text("Address: " + user_info.address)
+
+            var bookMap = $("<div>");
+            bookMap.attr("id", "myMapDiv");
+            // bookMap.appendTo(initMap);
       
             var ISBN = $("<p>");
             ISBN.addClass("subtitle is-6");
@@ -123,6 +145,7 @@ $(document).ready(function() {
             mediaContent.append(title);
             mediaContent.append(offerer);
             mediaContent.append(address);
+            mediaContent.append(bookMap);
             mediaContent.append(ISBN);
             mediaContent.append(author);
             // mediaContent.append(bookDesc);
@@ -163,6 +186,8 @@ $(document).ready(function() {
             $("#result").append(fullCard)
 
     }
+    // $(document).on('load', '#result', function (event) {
+    // })
 });
 
 // ********************************************************************************************************
