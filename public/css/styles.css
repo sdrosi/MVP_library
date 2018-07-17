@@ -25,3 +25,18 @@ form {
 #disclaimer {
     padding: 2%;
 }
+
+/*request/offer book div card-content */
+h6.header {
+    font-size: 2.5rem;
+}
+
+
+a.request_book {
+    font-weight: bold;
+    font-size: 1.75rem;
+}
+a.request_book:hover {
+    cursor: pointer;
+}
+
