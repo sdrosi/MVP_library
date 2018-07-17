@@ -5,99 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Little Free Library</title>
     <script src="https://code.jquery.com/jquery.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
   </head>
 
   <body>
-    <section class="hero is-medium" id="hero-photo-one">
-    <div class="hero-head">
-        <div class="columns is-mobile">
-            <div class="column">
-                <nav class="navbar" role="navigation" aria-label="main navigation">
-                    <div class="navbar-brand">
-                    <a class="navbar-item" href="https://bulma.io">
-                        <img src="./photos/logo_placeholder.png" alt="Suite Dreams Logo" width="112" height="28">
-                    </a>
-                    </div>
-                    <div class="navbar-menu">
-                        <div class="navbar-end">
-                            <a class="button is-primary is-inverted is-outlined" href="/logout">Log Out</a>
-                        </div>
-                    </div>
-                </nav>
-            </div>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo">Insert App Name Here</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="waves-effect waves-light btn-large social google" href="/logout">Logout</a></li>
+            <!-- <li><a href="#">Sign-Up</a></li> -->
+            <!-- <li><a href="collapsible.html">JavaScript</a></li> -->
+            </ul>
         </div>
-        <div class="columns is-mobile">
-            <h1 class="title" id="welcome_message"></h1>
-        </div>
-    </div>
-    <div class="hero-body" id="h_body">
-        <div class="columns is-mobile">
-            <div class="user-container">
-                <div class="modal">
-                    <div class="modal-background"></div>
-                    <div class="modal-card">
-                        <header class="modal-card-head">
-                        <p class="modal-card-title">Prompt Username</p>
-                        <button class="delete" aria-label="close"></button>
-                        </header>
-                        <section class="modal-card-body">
-                            <input class="input" id="user_name_input" type="text" placeholder="User name input">
-                            <p class="help is-danger" id="user_help_text"></p>
-                        </section>
-                        <footer class="modal-card-foot">
-                        <button class="button is-success" id="save_user">Save User</button>
-                        <button class="button">Cancel</button>
-                        </footer>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container" id="disclaimer_box">
-            <h1 class="title has-text-centered">Disclaimer</h1>
+    </nav>
+    <div class="container">
+
+        <form action="#" id="disclaimer">
+            <h1 class="center-align">Disclaimer</h1>
             <p>When using this app and engaging in book exchanges, please be aware of your surroundings and exchange content safely. You agree that your use of this App and exchanging of books is at your own risk, and it is your responsibility to maintain such health, liability, hazard, personal injury, medical, life, and other insurance policies as you deem reasonably necessary for any injuries that you may incur while using the App's Services. You also agree not to use the App to violate any applicable law, rule or regulation (including but not limited to the laws of trespass) and you agree not to encourage or enable any other individual to violate any applicable law, rule, or regulation. Without limiting the foregoing, you agree that in conjunction with your use of the App you will not inflict emotional distress on other people, will not humiliate other people (publicly or otherwise), will not assault or threaten other people, will not enter onto private property without permission, will not impersonate any other person or misrepresent your affiliation, title, or authority, and you will not otherwise engage in any activity that may result in injury, death, property damage, and/or liability of any kind. Further, in the event that you have a dispute with one or more other users of the App, you release the makers of this app (and our officers, directors, agents, subsidiaries, joint ventures and employees) from all claims, demands, and damages (actual and consequential) of every kind and nature, known and unknown, suspected and unsuspected, disclosed and undisclosed, arising out of or in any way connected with such disputes.</p>
-            <p> </p>    
-            <div class="container">
-                    <form id="disclaimer_check">
-                        <div class="field">
-                            <div class="columns is-centered">
-                                <div class="control">
-                                    <label class="checkbox">
-                                    <input type="checkbox" id="test">
-                                    I agree to the <a href="#">terms and conditions</a>
-                                    </label>
-                                </div> 
-                            </div>
-    
-                            <div class="field">
-                                <div class="columns is-centered">
-                                        <div class="control">
-                                            <button type ="submit" id="submit" href="/home" class="button is-link">Submit</button>
-                                        </div>
-                                        <div class="control">
-                                            <button href="/home" class="button is-text">Cancel</button>
-                                        </div>
-                                </div>
-    
-                            </div>
-                        </div>
-                    </form>
-
-
-                </div>
-        </div>
-        
+            <div class="center-align">
+                <p>
+                    <label>
+                        <!-- <div class="center-align"> -->
+                            <input type="checkbox" id="test"/>
+                            <span>By using this App, I agree to these terms and conditions.</span>
+                        <!-- </div> -->
+                    </label>
+                </p>
+            </div>
+            <div class="center-align">
+                <a class="waves-effect waves-light btn" id="submit">Submit</a>
+            </div>
+            
+        </form>
     </div>
 
-    </div>
-    <div class="hero-foot">
-    </div>
-</section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.0/moment.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-    <script src="js/disclaimer.js" type="text/javascript"></script>
-        
+        <script src="js/disclaimer.js" type="text/javascript"></script>
   </body>
 </html>

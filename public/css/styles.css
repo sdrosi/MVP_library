@@ -1,0 +1,27 @@
+body {
+    background-image: url("/photos/book-pages.jpg");
+    /* background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; */
+
+}
+
+nav {
+    margin-bottom: 1%;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 1%;
+    /* margin: 1%; */
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.7);
+    margin: 2%;
+}
+
+#disclaimer {
+    padding: 2%;
+}
