@@ -26,10 +26,32 @@ form {
     padding: 2%;
 }
 
+/*MODAL*/
 .modal-content {
     padding: 10px !important;
 }
 
+.row {
+    margin-bottom: 0px;
+}
+
+.input-field>label {
+    color: #777;
+    font-size: 1.4rem;
+}
+
+.input-field {
+    margin-bottom: 1rem;
+}
+
+.helper-text {
+    min-height: 0px;
+}
+
+.btn-flat {
+    border: 1px #777 solid;
+    font-weight: bold;
+}
 /*request/offer book div card-content */
 h6.header {
     font-size: 2.5rem;
@@ -45,4 +67,9 @@ a.request_book:hover {
 
 .pac-container {
     z-index: 1051 !important;
+}
+
+/*request books at home*/
+.card.horizontal .card-image {
+    padding: 20px;
 }
