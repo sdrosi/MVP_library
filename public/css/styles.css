@@ -57,13 +57,15 @@ h6.header {
     font-size: 2.5rem;
 }
 
-a.request_book {
+a.request_book, a.offer_book {
     font-weight: bold;
     font-size: 1.75rem;
 }
-a.request_book:hover {
+a.request_book:hover, a.offer_book:hover {
     cursor: pointer;
 }
+
+
 
 .pac-container {
     z-index: 1051 !important;
@@ -72,4 +74,9 @@ a.request_book:hover {
 /*request books at home*/
 .card.horizontal .card-image {
     padding: 20px;
+}
+
+.delete-book {
+    font-weight: bold;
+    font-size: 20px;
 }
