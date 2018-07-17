@@ -26,11 +26,14 @@ form {
     padding: 2%;
 }
 
+.modal-content {
+    padding: 10px !important;
+}
+
 /*request/offer book div card-content */
 h6.header {
     font-size: 2.5rem;
 }
-
 
 a.request_book {
     font-weight: bold;
@@ -40,3 +43,6 @@ a.request_book:hover {
     cursor: pointer;
 }
 
+.pac-container {
+    z-index: 1051 !important;
+}
