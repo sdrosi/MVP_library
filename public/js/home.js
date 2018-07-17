@@ -668,7 +668,7 @@ $(document).ready(function () {
 
     }
 
-    function viewRequest() {
+    function viewOffer() {
       var selectedRequest = $(this).data("book");
       window.location.href = "/view_offer?offer_id=" + selectedRequest.id;
 
