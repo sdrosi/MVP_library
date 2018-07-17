@@ -10,7 +10,7 @@ $(document).ready(function() {
     $(document).on("click", ".accept_book", acceptRequest);
     $(document).on("click", ".reject_book", rejectRequest);
   
-    if (url.indexOf("?offer_id=") !== -1) {
+    if (url.indexOf("?request_id=") !== -1) {
       requestId = url.split("=")[1];
     //   getUserInfo()
       getRequestData(requestId);
