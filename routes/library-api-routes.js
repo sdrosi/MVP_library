@@ -167,7 +167,31 @@ module.exports = function (app) {
         },
         include: {
             model: db.User,
-            attriubtes: ['userName', 'preferredDropAddress']
+            attributes: ['userName', 'preferredDropAddress']
+        }
+        })
+        .then(function(book_requests) {
+            res.json(book_requests);
+        });
+    });
+
+    app.get("/requests/pending", function(req, res) {
+        db.Book.findAll({
+        where: {
+            respondingUser: req.user.id,
+            postType: "REQUEST"
+        }
+        })
+        .then(function(book_requests) {
+            res.json(book_requests);
+        });
+    });
+
+    app.get("/offers/pending", function(req, res) {
+        db.Book.findAll({
+        where: {
+            postType: "OFFER",
+            postStatus: "DELIVERY PENDING"
         }
         })
         .then(function(book_requests) {
@@ -186,19 +210,128 @@ module.exports = function (app) {
         });
     });
 
-    app.put("/book/request/update/:id", function (req, res) {
-        db.Book.update(
-            {
-            postStatus: "PENDING",
-            respondingUser: req.user.id
-            },
-            {
-            where: {
-                id: req.params.id
-            }    
-        }).then(function (result) {
-            res.json(result);
-        });
+    app.put("/book/request/update/:id/:action", function (req, res) {
+        if (req.params.action === "DELIVERY_PENDING") {
+            db.Book.update(
+                {
+                postStatus: "DELIVERY PENDING",
+                deliveryAddress: req.body.address
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            });
+        }
+
+        else if (req.params.action === "PENDING") {
+            db.Book.update(
+                {
+                postStatus: "PENDING",
+                respondingUser: req.user.id
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            });
+        }
+
+        else if (req.params.action === "DECLINED") {
+            db.Book.update(
+                {
+                postStatus: "REQUESTED",
+                respondingUser: null,
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
+        else if (req.params.action === "DELIVERED") {
+            db.Book.update(
+                {
+                postStatus: "DELIVERED"
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
+        else if (req.params.action === "ARCHIVE") {
+            db.Book.update(
+                {
+                postType: "ARCHIVED"
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
+    });
+
+    app.put("/book/offer/update/:id/:action", function (req, res) {
+        if (req.params.action === "PENDING") {
+            db.Book.update(
+                {
+                postStatus: "PENDING",
+                respondingUser: req.user.id
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            });
+        }
+
+        else if (req.params.action === "DELIVERY PENDING") {
+            db.Book.update(
+                {
+                postStatus: "PENDING",
+                respondingUser: req.user.id
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            });
+        }
+
+        else if (req.params.action === "DECLINED") {
+            db.Book.update(
+                {
+                postStatus: "PENDING",
+                respondingUser: '',
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
     });
 
     app.post("/check-address", function(req, res) {
@@ -270,10 +403,46 @@ module.exports = function (app) {
         });
     });
 
+    app.get("/view-offer/:id", function(req, res) {
+        db.Book.findOne({
+        where: {
+            id: req.params.id,
+        },
+        include: {
+            model: db.User,
+            attributes: ['userName', 'preferredDropAddress']
+        }
+        })
+        .then(function(book_requests) {
+            res.json(book_requests);
+        });
+    });
+
+    app.get("/view-request/:id/:action", function(req, res) {
+        db.Book.findOne({
+        where: {
+            id: req.params.id,
+        }
+        })
+        .then(function(book_requests) {
+            res.json(book_requests);
+        });
+    });
+
     app.get("/user-info/:id", function(req, res) {
         db.User.findOne({
             where: {
               id: req.params.id
+            }
+          }).then(function(data){
+              res.json(data);
+          })
+    })
+
+    app.get("/user-info", function(req, res) {
+        db.User.findOne({
+            where: {
+              id: req.user.id
             }
           }).then(function(data){
               res.json(data);

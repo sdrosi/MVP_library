@@ -7,8 +7,8 @@ $(document).ready(function() {
     var respondingUserObject;
     // var respondingUser;
 
-    // $(document).on("click", ".accept", deleteRequest);
-    // $(document).on("click", ".reject", viewRequest);
+    $(document).on("click", ".accept_book", acceptRequest);
+    $(document).on("click", ".reject_book", rejectRequest);
   
     if (url.indexOf("?request_id=") !== -1) {
       requestId = url.split("=")[1];
@@ -17,6 +17,31 @@ $(document).ready(function() {
     //   buildRequestCard(requestObject, respondingUserObject)
     }
 
+    function acceptRequest() {
+        var selectedRequest = $(this).data("book");
+        console.log(selectedRequest)
+        $.ajax({
+            method: "PUT",
+            url: "/book/request/update/" + selectedRequest.id + "/DELIVERY_PENDING" ,
+            data: selectedRequest
+          })
+            .then(function() {
+              window.location.href = "/home";
+          });
+    }
+
+    function rejectRequest() {
+        var selectedRequest = $(this).data("book");
+        console.log(selectedRequest)
+        $.ajax({
+            method: "PUT",
+            url: "/book/request/update/" + selectedRequest.id + "/DECLINED" ,
+            data: selectedRequest
+          })
+            .then(function() {
+              window.location.href = "/home";
+          });
+    }
 
     // Gets data from db to pre-fill the newdream.html form
     // Works
@@ -90,39 +115,47 @@ $(document).ready(function() {
               
           }
       
-            var fullCard = $("<div>");
-            fullCard.addClass("card");
-      
-            var cardContent = $("<div>");
-            cardContent.addClass("card-content");
-      
-            var media = $("<div>");
-            media.addClass("media");
-      
-            // Media-left content
-            var mediaLeft = $("<div>");
-            mediaLeft.addClass("media-left");
-      
-            var mediaLeftFigure = $("<figure>");
-            mediaLeftFigure.addClass("image is-96x96");
-      
-            var mediaLeftImage = $("<img>");
-            mediaLeftImage.attr("src", book_info.thumbnail);
-      
-            mediaLeftFigure.append(mediaLeftImage);
-            mediaLeft.append(mediaLeftFigure);
-      
-            // Media content 
-            var mediaContent = $("<div>");
-            mediaContent.addClass("media-content");
-      
-            var title = $("<p>");
-            title.addClass("title is-4");
-            title.text(book_info.title);
-      
-            var offerer = $("<p>");
-            offerer.addClass("subtitle is-6");
-            offerer.text("Offerer: " + user_info.userName)
+          var fullCard = $("<div>");
+          fullCard.addClass("col s12 m7");
+    
+          // Card Horizontal 
+          var cardHorizontal = $("<div>");
+          cardHorizontal.addClass("card horizontal");
+    
+          // Card Horizontal Components
+          // Card Image div
+          var cardImage = $("<div>");
+          cardImage.addClass("card-image center-align valign-wrapper");
+    
+          var image = $("<img>");
+          image.attr("src", book_info.thumbnail)
+    
+          cardImage.append(image);
+          // vertAlign.append(cardImage)
+          cardHorizontal.append(cardImage)
+    
+          // Card Stacked div
+          var cardStacked = $("<div>");
+          cardStacked.addClass("card-stacked");
+    
+          var cardContent = $("<div>");
+          cardContent.addClass("card-content");
+    
+          var title = $("<h6>");
+          title.addClass("header");
+          title.text(book_info.title)
+    
+          var author = $("<p>");
+          author.text("Author: " + book_info.author);
+    
+          var ISBN = $("<p>");
+          ISBN.text("ISBN: " + book_info.ISBN);
+    
+          var offerer = $("<p>");
+          offerer.text("Offerer: " + user_info.userName)
+          
+          var address = $("<blockquote>")
+          address.text("Pick-Up Location: " + user_info.address);
 
             var address = $("<p>");
             address.addClass("subtitle is-6");
@@ -169,21 +202,23 @@ $(document).ready(function() {
             acceptLink.text("Accept Offer");
             acceptLink.data("book", dataObj)
 
-            var declineLink = $("<a>")
-            // requestLink.attr("href", "/request");
-            declineLink.addClass("card-footer-item decline");
-            declineLink.text("Decline Offer");
-            declineLink.data("book", dataObj)
-      
-            // if (results_list[i].UserId === id) {
-            //   requestLink.attr("title", "Disabled button")
-            // }
-      
-            footer.append(acceptLink);
-            footer.append(declineLink);
-            fullCard.append(footer);
-            
-            $("#result").append(fullCard)
+          var declineLink = $("<a>")
+          declineLink.addClass("reject_book");
+          declineLink.text("Decline Offer");
+          declineLink.data("book", dataObj)
+    
+          // var requestLink = $("<a>")
+          // requestLink.addClass("request_book")
+          // requestLink.text("Request this Book");
+          // requestLink.data("book", dataObj)
+    
+          cardAction.append(acceptLink);
+          cardAction.append(declineLink);
+          cardStacked.append(cardAction);
+          cardHorizontal.append(cardStacked)
+          fullCard.append(cardHorizontal)
+    
+          $("#result").append(fullCard)
 
     }
     // $(document).on('load', '#result', function (event) {
