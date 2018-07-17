@@ -3,7 +3,7 @@ $(document).ready(function() {
     var searchBtn = $("#searchBtn");
     var searchInput = $("#searchInput");
     
-    $(document).on("click", ".card-footer-item", handleBookOffer);
+    $(document).on("click", ".offer_book", handleBookOffer);
   
     // Adding an event listener for when the form is submitted
     $(searchBtn).on("click", function handleFormSubmit(event) {
@@ -28,6 +28,7 @@ $(document).ready(function() {
     }
 
     function buildSearchResults(results_list) {
+      $("#result").empty()
         for (i=0; i < results_list.length; i++) {
 
             var dataObj = {
@@ -40,81 +41,65 @@ $(document).ready(function() {
                 ISBN: results_list[i].industryIdentifiers[0].identifier
             }
             var fullCard = $("<div>");
-            fullCard.addClass("card");
+            fullCard.addClass("col s12 m7");
+
+            // Card Horizontal 
+            var cardHorizontal = $("<div>");
+            cardHorizontal.addClass("card horizontal");
+
+            // Card Horizontal Components
+            // Card Image div
+            var cardImage = $("<div>");
+            cardImage.addClass("card-image center-align valign-wrapper");
+
+            var image = $("<img>");
+            image.attr("src", results_list[i].thumbnail)
+
+            cardImage.append(image);
+            // vertAlign.append(cardImage)
+            cardHorizontal.append(cardImage)
+
+            // Card Stacked div
+            var cardStacked = $("<div>");
+            cardStacked.addClass("card-stacked");
 
             var cardContent = $("<div>");
             cardContent.addClass("card-content");
 
-            var media = $("<div>");
-            media.addClass("media");
-
-            // Media-left content
-            var mediaLeft = $("<div>");
-            mediaLeft.addClass("media-left");
-
-            var mediaLeftFigure = $("<figure>");
-            mediaLeftFigure.addClass("image is-96x96");
-
-            var mediaLeftImage = $("<img>");
-            mediaLeftImage.attr("src", results_list[i].thumbnail);
-
-            mediaLeftFigure.append(mediaLeftImage);
-            mediaLeft.append(mediaLeftFigure);
-
-            // Media content 
-            var mediaContent = $("<div>");
-            mediaContent.addClass("media-content");
-
-            var title = $("<p>");
-            title.addClass("title is-4");
-            title.text(results_list[i].title);
-
-            var pubDate = $("<p>");
-            pubDate.addClass("subtitle is-6");
-            pubDate.text(results_list[i].publishedDate)
-
-            var ISBN = $("<p>");
-            ISBN.addClass("subtitle is-6");
-            ISBN.text(results_list[i].industryIdentifiers[0].identifier)
+            var title = $("<h6>");
+            title.addClass("header");
+            title.text(results_list[i].title)
 
             var author = $("<p>");
-            author.addClass("subtitle is-6");
-            author.text(results_list[i].authors[0]);
+            author.text("Author: " + results_list[i].authors[0]);
 
-            var divider = $("<hr>")
+            var published = $("<p>");
+            published.text("Publication Date: " + results_list[i].publishedDate);
 
-            mediaContent.append(title);
-            mediaContent.append(pubDate);
-            mediaContent.append(ISBN)
-            mediaContent.append(author);
-            mediaContent.append(divider);
+            var ISBN = $("<p>");
+            ISBN.text("ISBN: " + results_list[i].industryIdentifiers[0].identifier);
 
-            media.append(mediaLeft);
-            media.append(mediaContent)
+            cardContent.append(title);
+            cardContent.append(author);
+            cardContent.append(published);
+            cardContent.append(ISBN);
+            cardStacked.append(cardContent);
 
-            var bookDesc = $("<div>")
-            bookDesc.addClass("content");
-            bookDesc.text(results_list[i].description);
-
-            cardContent.append(media)
-            cardContent.append(bookDesc);
-
-            fullCard.append(cardContent);
-
-            // Card Footer
-            var footer = $("<footer>");
-            footer.addClass("card-footer");
+            var cardAction = $("<div>");
+            cardAction.addClass("card-action center-align");
 
             var requestLink = $("<a>")
-            // requestLink.attr("href", "/book/offer");
-            requestLink.addClass("card-footer-item");
+            requestLink.addClass("offer_book")
             requestLink.text("Offer this Book");
             requestLink.data("book", dataObj)
 
-            footer.append(requestLink);
-            fullCard.append(footer);
-            
+            cardAction.append(requestLink);
+            cardStacked.append(cardAction);
+            cardHorizontal.append(cardStacked)
+            fullCard.append(cardHorizontal)
+
             $("#result").append(fullCard)
+
         }
     }
 

@@ -45,6 +45,11 @@ module.exports = function(sequelize, DataTypes) {
     ISBN: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+
+    deliveryAddress: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
     // ****************************************
 

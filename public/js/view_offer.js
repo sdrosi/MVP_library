@@ -22,7 +22,7 @@ $(document).ready(function() {
         console.log(selectedRequest)
         $.ajax({
             method: "PUT",
-            url: "/book/request/update/" + selectedRequest.id + "/DELIVERY_PENDING" ,
+            url: "/book/offer/update/" + selectedRequest.id + "/DELIVERY_PENDING" ,
             data: selectedRequest
           })
             .then(function() {
@@ -35,7 +35,7 @@ $(document).ready(function() {
         console.log(selectedRequest)
         $.ajax({
             method: "PUT",
-            url: "/book/request/update/" + selectedRequest.id + "/DECLINED" ,
+            url: "/book/offer/update/" + selectedRequest.id + "/DECLINED" ,
             data: selectedRequest
           })
             .then(function() {
@@ -46,7 +46,7 @@ $(document).ready(function() {
     // Gets data from db to pre-fill the newdream.html form
     // Works
     function getRequestData(book_id) {
-        $.get("/view-request/" + book_id, function(data) {
+        $.get("/view-offer/" + book_id, function(data) {
             if (data) {
                 console.log(data)
                 requestObject = {
@@ -55,46 +55,47 @@ $(document).ready(function() {
                     author: data.author,
                     thumbnail: data.thumbnail,
                     ISBN: data.ISBN,
-                    respondingUser: data.respondingUser
+                    offerUsername: data.User.userName,
+                    address: data.User.preferredDropAddress
                 }
                 console.log(requestObject)
-                getUserInfo(requestObject);
+                buildRequestCard(requestObject);
             }
         })
     }
 
-    function getUserInfo(book_object) {
-        var user_id = book_object.respondingUser;
-        $.ajax({
-            method: "GET",
-            url: "/user-info/" + user_id
-          })
-            .then(function(data) {
-              console.log(data)
-              respondingUserObject = {
-                  id: data.id,
-                  userName: data.userName,
-                  address: data.preferredDropAddress, 
-              }
-              console.log(respondingUserObject)
-              buildRequestCard(requestObject, respondingUserObject)
-          });
-    }
+    // function getUserInfo(book_object) {
+    //     var user_id = book_object.respondingUser;
+    //     $.ajax({
+    //         method: "GET",
+    //         url: "/user-info"
+    //       })
+    //         .then(function(data) {
+    //           console.log(data)
+    //           offeringUserObject = {
+    //               id: data.id,
+    //               userName: data.userName,
+    //               address: data.preferredDropAddress, 
+    //           }
+    //           console.log(offeringUserObject)
+    //           buildRequestCard(requestObject, respondingUserObject)
+    //       });
+    // }
 
-    function buildRequestCard(book_info, user_info) {
-        console.log("book_info")
-        console.log(book_info)
-        console.log("user_info")
-        console.log(user_info)
+    function buildRequestCard(offer_info) {
+        console.log("offer_info")
+        console.log(offer_info)
+        // console.log("user_info")
+        // console.log(user_info)
       
             var dataObj = {
-              id: book_info.id,
-              title: book_info.title,
-              author: book_info.author,
-              thumbnail: book_info.thumbnail,
-              ISBN: book_info.ISBN,
-              address: user_info.address,
-              respondingUser: user_info.userName
+              id: offer_info.id,
+              title: offer_info.title,
+              author: offer_info.author,
+              thumbnail: offer_info.thumbnail,
+              ISBN: offer_info.ISBN,
+              address: offer_info.address,
+              respondingUser: offer_info.offerUserName
               
           }
       
@@ -111,7 +112,7 @@ $(document).ready(function() {
           cardImage.addClass("card-image center-align valign-wrapper");
     
           var image = $("<img>");
-          image.attr("src", book_info.thumbnail)
+          image.attr("src", offer_info.thumbnail)
     
           cardImage.append(image);
           // vertAlign.append(cardImage)
@@ -126,25 +127,25 @@ $(document).ready(function() {
     
           var title = $("<h6>");
           title.addClass("header");
-          title.text(book_info.title)
+          title.text(offer_info.title)
     
           var author = $("<p>");
-          author.text("Author: " + book_info.author);
+          author.text("Author: " + offer_info.author);
     
           var ISBN = $("<p>");
-          ISBN.text("ISBN: " + book_info.ISBN);
+          ISBN.text("ISBN: " + offer_info.ISBN);
     
-          var offerer = $("<p>");
-          offerer.text("Offerer: " + user_info.userName)
+        //   var offerer = $("<p>");
+        //   offerer.text("Offerer: " + offer_info.offerUserName)
           
           var address = $("<blockquote>")
-          address.text("Pick-Up Location: " + user_info.address);
+          address.text("Your Drop Off Location: " + offer_info.address);
 
     
           cardContent.append(title);
           cardContent.append(author);
           cardContent.append(ISBN);
-          cardContent.append(offerer);
+        //   cardContent.append(offerer);
           cardContent.append(address);
           cardStacked.append(cardContent);
     
@@ -153,12 +154,12 @@ $(document).ready(function() {
     
           var acceptLink = $("<a>")
           acceptLink.addClass("accept_book");
-          acceptLink.text("Accept Offer");
+          acceptLink.text("Confirm Exchange");
           acceptLink.data("book", dataObj)
 
           var declineLink = $("<a>")
           declineLink.addClass("reject_book");
-          declineLink.text("Decline Offer");
+          declineLink.text("Decline Exchange");
           declineLink.data("book", dataObj)
     
           // var requestLink = $("<a>")
@@ -178,58 +179,5 @@ $(document).ready(function() {
 });
 
 // ********************************************************************************************************
-  
-//     // Getting jQuery references to the the form fields
-//     var title = $("#title");
-//     var mood = $("#mood");
-//     var dream = $("#dream_input");
-//     var postPrivacy = $("#privacy");
-//     var cmsForm = $("#cms");
-  
-//     // Adding an event listener for when the form is submitted
-//     $(cmsForm).on("submit", function handleFormSubmit(event) {
-//       event.preventDefault();
-//       if (!title.val().trim() || !dream.val().trim()) {
-//         return;
-//       }
-//       // Building variable to be submitted to database
-//       var newDream = {
-//         title: title.val().trim(),
-//         mood: mood.val(),
-//         dream: dream.val(),
-//         privacy: postPrivacy.val()
-//       };
-  
-//       if (updating) {
-//         console.log("Updating post")
-//         newDream.id = dreamId;
-//         updateDream(newDream);
-//       }
-//       else {
-//         console.log("Submitting new post")
-//         submitDream(newDream);
-//       }
-//     });
-  
-//     // Submits dream to database with a POST request
-//     function submitDream(Dream) {
-//       $.post("/add-dream/", Dream, function() {
-//         window.location.href = "/my-dreams";
-//       });
-//     }
-  
 
-  
-//     // Submits PUT request to update dream
-//     function updateDream(dream) {
-//       $.ajax({
-//         method: "PUT",
-//         url: "/add-dream",
-//         data: dream
-//       })
-//         .then(function() {
-//           window.location.href = "/my-dreams";
-//         });
-//     }
-//   });
   
