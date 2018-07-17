@@ -26,23 +26,57 @@ form {
     padding: 2%;
 }
 
+/*MODAL*/
 .modal-content {
     padding: 10px !important;
 }
 
+.row {
+    margin-bottom: 0px;
+}
+
+.input-field>label {
+    color: #777;
+    font-size: 1.4rem;
+}
+
+.input-field {
+    margin-bottom: 1rem;
+}
+
+.helper-text {
+    min-height: 0px;
+}
+
+.btn-flat {
+    border: 1px #777 solid;
+    font-weight: bold;
+}
 /*request/offer book div card-content */
 h6.header {
     font-size: 2.5rem;
 }
 
-a.request_book {
+a.request_book, a.offer_book {
     font-weight: bold;
     font-size: 1.75rem;
 }
-a.request_book:hover {
+a.request_book:hover, a.offer_book:hover {
     cursor: pointer;
 }
 
+
+
 .pac-container {
     z-index: 1051 !important;
+}
+
+/*request books at home*/
+.card.horizontal .card-image {
+    padding: 20px;
+}
+
+.delete-book {
+    font-weight: bold;
+    font-size: 20px;
 }
