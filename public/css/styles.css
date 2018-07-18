@@ -11,6 +11,11 @@ nav {
     margin-bottom: 1%;
 }
 
+nav .brand-logo {
+    padding-left: 10px;
+
+}
+
 .container {
     background-color: rgba(255, 255, 255, 0.7);
     padding: 1%;
@@ -24,6 +29,10 @@ form {
 
 #disclaimer {
     padding: 2%;
+}
+
+#signUpNew {
+    float: right;
 }
 
 /*MODAL*/
@@ -51,6 +60,8 @@ form {
 .btn-flat {
     border: 1px #777 solid;
     font-weight: bold;
+    background-color: #26a69a;
+    color: #fff;
 }
 /*request/offer book div card-content */
 h6.header {
