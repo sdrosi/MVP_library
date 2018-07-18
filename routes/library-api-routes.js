@@ -93,7 +93,7 @@ module.exports = function (app) {
             },
             include: {
                 model: db.User,
-                attributes: ['userName', 'zipCode']
+                attributes: ['userName', 'zipCode', "preferredDropAddress"]
             }
         }).then(function (dbDreams) {
             res.json(dbDreams);
@@ -190,8 +190,25 @@ module.exports = function (app) {
     app.get("/offers/pending", function(req, res) {
         db.Book.findAll({
         where: {
+            UserId: req.user.id,
             postType: "OFFER",
             postStatus: "DELIVERY PENDING"
+        },
+        include: {
+            model: db.User,
+            attributes: ['userName', 'preferredDropAddress']
+        }
+        })
+        .then(function(book_requests) {
+            res.json(book_requests);
+        });
+    });
+
+    app.get("/offers/deliver/me", function(req, res) {
+        db.Book.findAll({
+        where: {
+            respondingUser: req.user.id,
+            postType: "OFFER"
         }
         })
         .then(function(book_requests) {
@@ -210,12 +227,21 @@ module.exports = function (app) {
         });
     });
 
+    app.delete("/book/offer/delete/:id", function (req, res) {
+        db.Book.destroy({
+            where: {
+                id: req.params.id
+            }
+        }).then(function (result) {
+            res.json(result);
+        });
+    });
+
     app.put("/book/request/update/:id/:action", function (req, res) {
         if (req.params.action === "DELIVERY_PENDING") {
             db.Book.update(
                 {
-                postStatus: "DELIVERY PENDING",
-                deliveryAddress: req.body.address
+                postStatus: "DELIVERY PENDING"
                 },
                 {
                 where: {
@@ -230,7 +256,8 @@ module.exports = function (app) {
             db.Book.update(
                 {
                 postStatus: "PENDING",
-                respondingUser: req.user.id
+                respondingUser: req.user.id,
+                deliveryAddress: req.user.preferredDropAddress
                 },
                 {
                 where: {
@@ -246,6 +273,7 @@ module.exports = function (app) {
                 {
                 postStatus: "REQUESTED",
                 respondingUser: null,
+                deliveryAddress: null,
                 },
                 {
                 where: {
@@ -284,6 +312,20 @@ module.exports = function (app) {
             })
         }
 
+        else if (req.params.action === "REMOVE") {
+            db.Book.update(
+                {
+                respondingUser: null
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
     });
 
     app.put("/book/offer/update/:id/:action", function (req, res) {
@@ -302,11 +344,11 @@ module.exports = function (app) {
             });
         }
 
-        else if (req.params.action === "DELIVERY PENDING") {
+        else if (req.params.action === "DELIVERY_PENDING") {
             db.Book.update(
                 {
-                postStatus: "PENDING",
-                respondingUser: req.user.id
+                postStatus: "DELIVERY PENDING",
+                deliveryAddress: req.body.address
                 },
                 {
                 where: {
@@ -321,7 +363,36 @@ module.exports = function (app) {
             db.Book.update(
                 {
                 postStatus: "PENDING",
-                respondingUser: '',
+                respondingUser: null,
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
+        else if (req.params.action === "CANCEL_REQUEST") {
+            db.Book.update(
+                {
+                postStatus: "OFFERED",
+                respondingUser: null,
+                },
+                {
+                where: {
+                    id: req.params.id
+                }    
+            }).then(function (result) {
+                res.json(result);
+            })
+        }
+
+        else if (req.params.action === "DISASSOCIATE") {
+            db.Book.update(
+                {
+                UserId: null
                 },
                 {
                 where: {
@@ -396,6 +467,10 @@ module.exports = function (app) {
         db.Book.findOne({
         where: {
             id: req.params.id,
+        },
+        include: {
+            model: db.User,
+            attributes: ['userName', 'preferredDropAddress']
         }
         })
         .then(function(book_requests) {

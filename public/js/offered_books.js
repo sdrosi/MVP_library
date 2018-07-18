@@ -119,7 +119,7 @@ $(document).ready(function () {
 
       var requestLink = $("<a>")
       requestLink.addClass("offer_book");
-      requestLink.text("Have this book? Offer to this user");
+      requestLink.text("Want this book? Click here!");
       requestLink.data("book", dataObj)
 
       // var requestLink = $("<a>")
