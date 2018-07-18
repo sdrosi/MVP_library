@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.modal').modal();
+    $('.modal').modal({dismissible:false});
     var inputUser = $("#user_name_input");
     var inputZip = $("#zip_code_input");
     var nameHelpText = $("#user_help_text");
