@@ -26,6 +26,10 @@ form {
     padding: 2%;
 }
 
+#signUpNew {
+    float: right;
+}
+
 /*MODAL*/
 .modal-content {
     padding: 10px !important;
