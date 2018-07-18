@@ -10,6 +10,8 @@ $(document).ready(function () {
     var loggedUser;
     $(document).on("click", "#check_user", checkUserName);
     $(document).on("click", ".remove-dashboard", archiveRequest);
+    $(document).on("click", ".remove-dashboard-offerer", disassociateOffer);
+    $(document).on("click", ".cancel-exchange", cancelRequest);
     $(document).on("click", ".exchange-action", viewOffer);
     $(document).on("click", ".delete-book", deleteRequest);
     $(document).on("click", ".confirm-book", viewRequest);
@@ -83,6 +85,7 @@ $(document).ready(function () {
     function validateUserName() {
       $.get("/validate-user", function(data) {
         console.log("User", data);
+        console.log(data[0].preferredDropAddress)
         user = data;
         loggedUser = data;
         
@@ -98,6 +101,7 @@ $(document).ready(function () {
           getBookOffers()
           getPendingRequests()
           getPendingOffers()
+          getBooksOffered()
         }
       })
     }
@@ -263,6 +267,12 @@ $(document).ready(function () {
         requestLink.data("book", dataObj)
       }
 
+      else if (results_list[i].postStatus === "DELIVERED") {
+        requestLink.addClass("remove-dashboard-offerer");
+        requestLink.text("Remove from dashboard");
+        requestLink.data("book", dataObj)
+      }
+
       else {
         requestLink.addClass("delete-book");
         requestLink.text("Remove from community offerings");
@@ -311,6 +321,19 @@ $(document).ready(function () {
       });
     }
 
+    // function getPendingOfferDeliveries() {
+    //   $.get("/offers/deliver/me", function (data) {
+    //     console.log("Pending Book Requests", data);
+    //     book_requests = data;
+    //     if (!book_requests || !book_requests.length) {
+    //       displayEmpty();
+    //     }
+    //     else {
+    //       displayPending(book_requests);
+    //     }
+    //   });
+    // }
+
     function getPendingOffers() {
       $.get("/offers/pending", function (data) {
         console.log("Pending Book Offers", data);
@@ -324,7 +347,21 @@ $(document).ready(function () {
       });
     }
 
+    function getBooksOffered() {
+      $.get("/offers/deliver/me", function (data) {
+        console.log("Books delivered to me", data);
+        book_offers = data;
+        if (!book_offers || !book_offers.length) {
+          displayEmpty();
+        }
+        else {
+          displayPendingOffers(book_offers);
+        }
+      });
+    }
+
     function displayPending(results_list) {
+      console.log(results_list)
       for (i=0; i < results_list.length; i++) {
 
         var dataObj = {
@@ -437,8 +474,8 @@ $(document).ready(function () {
       else if (results_list[i].postStatus === "DELIVERED") {
 
         var deliveredLink = $("<a>")
-        deliveredLink.addClass("remove-dashboard");
-        deliveredLink.text("Delete from Dashboard");
+        deliveredLink.addClass("remove-dashboard-offerer");
+        deliveredLink.text("Remove from Dashboard");
         deliveredLink.data("book", dataObj);
         
         }
@@ -458,6 +495,7 @@ $(document).ready(function () {
   }
 
   function displayPendingOffers(results_list) {
+    console.log(results_list)
     for (i=0; i < results_list.length; i++) {
 
       var dataObj = {
@@ -511,7 +549,42 @@ $(document).ready(function () {
     var status = $("<blockquote>");
 
     console.log(displayedUser)
+    console.log(loggedUser)
+  
+  if (results_list[i].UserId != loggedUser[0].id) {
+    if (results_list[i].postStatus === "PENDING") {
+      status.text("Status: Pending response from book owner.")
+      cardContent.append(title);
+      cardContent.append(author);
+      cardContent.append(ISBN);
+      cardContent.append(status)
+      cardStacked.append(cardContent);
+    }
 
+    else if (results_list[i].postStatus === "DELIVERY PENDING") {
+      status.text("Status: Book exchange confirmed. Offerer will drop book off at: " + results_list[i].deliveryAddress)
+      // var address = $("<p>");
+      // address.text(displayedUser.preferredDropAddress)
+      cardContent.append(title);
+      cardContent.append(author);
+      cardContent.append(ISBN);
+      cardContent.append(status)
+      // cardContent.append(address)
+      cardStacked.append(cardContent);
+    }
+
+    else if (results_list[i].postStatus === "DELIVERED") {
+      status.text("Status: Book has been delivered. Pick up book at the following address: " + results_list[i].deliveryAddress)
+      cardContent.append(title);
+      cardContent.append(author);
+      cardContent.append(ISBN);
+      cardContent.append(status)
+      cardStacked.append(cardContent);
+    }
+
+  }
+
+  else {
     if (results_list[i].postStatus === "PENDING") {
       status.text("Status: A user has requested this book.")
       cardContent.append(title);
@@ -521,60 +594,89 @@ $(document).ready(function () {
       cardStacked.append(cardContent);
     }
 
-    // else if (results_list[i].postStatus === "DELIVERY PENDING") {
-    //   status.text("Status: Requester accepted your offer. Please drop off book to the following location: " + loggedUser[0].preferredDropAddress)
-    //   // var address = $("<p>");
-    //   // address.text(displayedUser.preferredDropAddress)
-    //   cardContent.append(title);
-    //   cardContent.append(author);
-    //   cardContent.append(ISBN);
-    //   cardContent.append(status)
-    //   // cardContent.append(address)
-    //   cardStacked.append(cardContent);
-    // }
+    else if (results_list[i].postStatus === "DELIVERY PENDING") {
+      status.text("Status: Book exchange confirmed. Please drop off book to the following location: " + loggedUser[0].preferredDropAddress)
+      // var address = $("<p>");
+      // address.text(displayedUser.preferredDropAddress)
+      cardContent.append(title);
+      cardContent.append(author);
+      cardContent.append(ISBN);
+      cardContent.append(status)
+      // cardContent.append(address)
+      cardStacked.append(cardContent);
+    }
 
-    // else {
-    //   status.text("Status: " + results_list[i].postStatus)
-    //   cardContent.append(title);
-    //   cardContent.append(author);
-    //   cardContent.append(ISBN);
-    //   cardContent.append(status)
-    //   cardStacked.append(cardContent);
-    // }
+    else {
+      status.text("Status: " + results_list[i].postStatus)
+      cardContent.append(title);
+      cardContent.append(author);
+      cardContent.append(ISBN);
+      cardContent.append(status)
+      cardStacked.append(cardContent);
+    }
+
+  }
 
 
     var cardAction = $("<div>");
     cardAction.addClass("card-action center-align");
 
-    if (results_list[i].postStatus === "PENDING") {
-      var cancelLink = $("<a>")
-      cancelLink.addClass("exchange-action");
-      cancelLink.text("Confirm/Decline Exchange");
-      cancelLink.data("book", dataObj);
-    } 
+    if (results_list[i].UserId != loggedUser[0].id) {
+      if (results_list[i].postStatus === "PENDING") {
+        var cancelLink = $("<a>")
+        cancelLink.addClass("cancel-exchange");
+        cancelLink.text("Cancel request for book from user");
+        cancelLink.data("book", dataObj);
+      }
+      
+      else if (results_list[i].postStatus === "DELIVERY PENDING") {
+        var cancelLink = $("<a>")
+        cancelLink.addClass("cancel-exchange");
+        cancelLink.text("Cancel request for book from user");
+        cancelLink.data("book", dataObj);
+      } 
 
-    else if (results_list[i].postStatus === "DELIVERY PENDING") {
-
-    var deliveredLink = $("<a>")
-    deliveredLink.addClass("delivered-book");
-    deliveredLink.text("Book Delivered");
-    deliveredLink.data("book", dataObj);
-
-    var cancelLink = $("<a>")
-    cancelLink.addClass("cancel-delivery");
-    cancelLink.text("Cancel Delivery");
-    cancelLink.data("book", dataObj);
-    
+      else if (results_list[i].postStatus === "DELIVERED") {
+        var cancelLink = $("<a>")
+        cancelLink.addClass("delete-book");
+        cancelLink.text("Remove from dashboard");
+        cancelLink.data("book", dataObj);
+      } 
     }
 
-    else if (results_list[i].postStatus === "DELIVERED") {
-
+    else {
+      if (results_list[i].postStatus === "PENDING") {
+        var cancelLink = $("<a>")
+        cancelLink.addClass("exchange-action");
+        cancelLink.text("Confirm/Decline Exchange");
+        cancelLink.data("book", dataObj);
+      } 
+  
+      else if (results_list[i].postStatus === "DELIVERY PENDING") {
+  
+      var deliveredLink = $("<a>")
+      deliveredLink.addClass("delivered-book");
+      deliveredLink.text("Book Delivered");
+      deliveredLink.data("book", dataObj);
+  
+      var cancelLink = $("<a>")
+      cancelLink.addClass("cancel-delivery");
+      cancelLink.text("Cancel Delivery");
+      cancelLink.data("book", dataObj);
+      
+      }
+  
+      else if (results_list[i].postStatus === "DELIVERED") {
+  
       var deliveredLink = $("<a>")
       deliveredLink.addClass("remove-dashboard");
       deliveredLink.text("Delete from Dashboard");
       deliveredLink.data("book", dataObj);
       
       }
+    }
+
+    
     // var requestLink = $("<a>")
     // requestLink.addClass("request_book")
     // requestLink.text("Request this Book");
@@ -636,9 +738,18 @@ $(document).ready(function () {
 
       var author = $("<p>");
       author.text("Author: " + results_list[i].author);
+      
 
       var status = $("<blockquote>");
-      status.text("Status: " + results_list[i].postStatus)
+
+      if (results_list[i].postStatus === "DELIVERED") {
+        status.text("Status: " + results_list[i].postStatus + " to " + results_list[i].deliveryAddress)
+      }
+
+      else {
+        status.text("Status: " + results_list[i].postStatus)
+      }
+      
 
       cardContent.append(title);
       cardContent.append(author);
@@ -705,7 +816,19 @@ $(document).ready(function () {
         url: "/book/request/delete/" + selectedBook.id
       })
         .then(function () {
-          getBookRequests();
+          window.location.href = "/home";
+        });
+    }
+
+    function deleteOffer() {
+      var selectedBook = $(this).data("book");
+      console.log(selectedBook)
+      $.ajax({
+        method: "DELETE",
+        url: "/book/offer/delete/" + selectedBook.id
+      })
+        .then(function () {
+          window.location.href = "/home";
         });
     }
 
@@ -715,6 +838,18 @@ $(document).ready(function () {
       $.ajax({
         method: "PUT",
         url: "/book/request/update/" + selectedBook.id + "/DECLINED"
+      })
+        .then(function () {
+          window.location.href = "/home";
+        });
+    }
+
+    function cancelRequest() {
+      var selectedBook = $(this).data("book");
+      console.log(selectedBook)
+      $.ajax({
+        method: "PUT",
+        url: "/book/offer/update/" + selectedBook.id + "/CANCEL_REQUEST"
       })
         .then(function () {
           window.location.href = "/home";
@@ -738,7 +873,19 @@ $(document).ready(function () {
       console.log(selectedBook)
       $.ajax({
         method: "PUT",
-        url: "/book/request/update/" + selectedBook.id + "/ARCHIVE"
+        url: "/book/request/update/" + selectedBook.id + "/REMOVE"
+      })
+        .then(function () {
+          window.location.href = "/home";
+        });
+    }
+
+    function disassociateOffer() {
+      var selectedBook = $(this).data("book");
+      console.log(selectedBook)
+      $.ajax({
+        method: "PUT",
+        url: "/book/offer/update/" + selectedBook.id + "/DISASSOCIATE"
       })
         .then(function () {
           window.location.href = "/home";

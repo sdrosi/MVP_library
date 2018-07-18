@@ -56,7 +56,8 @@ $(document).ready(function() {
                     thumbnail: data.thumbnail,
                     ISBN: data.ISBN,
                     offerUsername: data.User.userName,
-                    address: data.User.preferredDropAddress
+                    address: data.User.preferredDropAddress,
+                    origin: data.UserId
                 }
                 console.log(requestObject)
                 buildRequestCard(requestObject);
