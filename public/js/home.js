@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.modal').modal();
+    $('.modal').modal({dismissible:false});
     var inputUser = $("#user_name_input");
     var inputZip = $("#zip_code_input");
     var nameHelpText = $("#user_help_text");
@@ -25,17 +25,17 @@ $(document).ready(function () {
     
     var book_requests;
 
-
-    /*GOOGLE MAPS*/
+/*
+    GOOGLE MAPS
     var autocomplete;
     function initAutocomplete() {
       console.log("MADEIT");
       // Create the autocomplete object, restricting the search to geographical
       // location types.
       autocomplete = new google.maps.places.Autocomplete(
-          /** @type {!HTMLInputElement} */(document.getElementById('address_input')),
+          /** @type {!HTMLInputElement} **//*(document.getElementById('address_input')),
           {types: ['geocode']});
-
+/*
       // When the user selects an address from the dropdown, populate the address
       // fields in the form.
       //autocomplete.addListener('place_changed', fillInAddress);
@@ -43,7 +43,7 @@ $(document).ready(function () {
 
     google.maps.event.addDomListener(window, 'load', initAutocomplete);
     
-
+*/
 
     function searchAddress() {
       var inputtedAddress = {
