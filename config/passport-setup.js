@@ -7,7 +7,7 @@ require('dotenv').config();
 if(process.env.STATUS === 'DEV'){
     var link = '/auth/google/redirect'
 }else if(process.env.STATUS === 'PROD'){
-    var link ='https://communibook.herokuapp.com/auth/google/redirect'
+    var link ='http://communibook.herokuapp.com/auth/google/redirect'
 }
 
 passport.use(new GoogleStrategy({
