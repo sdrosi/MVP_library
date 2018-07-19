@@ -7,7 +7,7 @@ require('dotenv').config();
 if(process.env.STATUS === 'DEV'){
     var link = '/auth/google/redirect'
 }else if(process.env.STATUS === 'PROD'){
-    var link ='https://protected-anchorage-15693.herokuapp.com/auth/google/redirect'
+    var link ='https://communibook.herokuapp.com//auth/google/redirect'
 }
 
 passport.use(new GoogleStrategy({
@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
 }, (accessToken, refreshToken, email, done) => {
     // passport callback function
     //console.log(email);
-    //console.log(profile);
+    //console.log(profile);s
 
 
     db.User.findOne({
