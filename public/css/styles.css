@@ -73,11 +73,11 @@ h6.header {
     font-size: 2.5rem;
 }
 
-a.request_book, a.offer_book, a.cancel-delivery, a.delivered-book {
+a.request_book, a.offer_book, a.cancel-delivery, a.delivered-book, a.exchange-action:hover, a.accept_book, a.reject_book, a.cancel-delivery-request {
     font-weight: bold;
     font-size: 1.75rem;
 }
-a.request_book:hover, a.offer_book:hover, a.cancel-delivery, a.delivered-book {
+a.request_book:hover, a.offer_book:hover, a.cancel-delivery:hover, a.delivered-book:hover, a.accept_book:hover, a.reject_book:hover, a.cancel-delivery-request:hover {
     cursor: pointer;
 }
 
